@@ -1,0 +1,29 @@
+{
+  "name": "jellyfin-titanos",
+  "version": "0.0.1",
+  "description": "Jellyfin for TitanOS Smart TVs ",
+  "scripts": {
+    "build": "gulp",
+    "postinstall": "gulp",
+      "predeploy": "npm run build",
+  "deploy": "gh-pages -d build",
+  
+
+    "build_jellyfin-web": "cd jellyfin-web && npm ci --no-audit && USE_SYSTEM_FONTS=1 npm run build:production",
+    "build_jellyfin-web:dev": "cd jellyfin-web && npm ci --no-audit && USE_SYSTEM_FONTS=1 npm run build:development",
+    "prepare_jellyfin-interface": "cd jellyfin-tizen && JELLYFIN_WEB_DIR=../jellyfin-web/dist npm ci --no-audit",
+    "build_all": "npm run build:jellyfin-web && npm run prepare:jellyfin-interface"
+
+  },
+  "devDependencies": {
+    "@babel/preset-env": "7.25.7",
+    "@babel/register": "7.25.7",
+    "del": "8.0.0",
+    "gh-pages": "^6.3.0",
+    "gulp": "5.0.0",
+    "gulp-dom": "1.0.0",
+    "gulp-if": "3.0.0",
+    "gulp-scan": "0.1.4"
+  },
+  "type": "module"
+}
