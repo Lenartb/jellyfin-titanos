@@ -18,13 +18,19 @@ const paths = {
     assets: {
         src: [
             WEB_DIR + '/**/*',
-            '!' + WEB_DIR + '/index.html'
+            '!' + WEB_DIR + '/index.html',
+
         ],
         dest: 'dist/'
     },
     index: {
         src: WEB_DIR + '/index.html',
         dest: 'dist/'
+    },
+    
+    rootFiles: {
+        src: 'titanos.js',   // file in project root
+        dest: 'dist/'        // copy to dist/
     }
 };
 
@@ -34,7 +40,10 @@ function clean() {
         'dist'
     ]);
 }
-
+function copyRootFiles() {
+    return gulp.src(paths.rootFiles.src)
+        .pipe(gulp.dest(paths.rootFiles.dest));
+}
 // Search for used fonts and add them to assets
 function searchFonts() {
     if (!DISCARD_UNUSED_FONTS) return Promise.resolve('skipped');
@@ -61,10 +70,7 @@ function copy() {
     return gulp.src(paths.assets.src, { encoding: false })
         .pipe(gulp.dest(paths.assets.dest));
 }
-gulp.task('copy', function () {
-    gulp.src('titanos.js')
-        .pipe(gulp.dest('dist'));
-});
+
 // Add required tags to index.html
 function modifyIndex() {
     return gulp.src(paths.index.src)
@@ -126,6 +132,8 @@ function modifyIndex() {
 const build = gulp.series(
     clean,
     searchFonts,
+        copyRootFiles,
+
     gulp.parallel(copy, modifyIndex)
 );
 
